@@ -3,8 +3,7 @@ import java.util.Scanner;
 public class Hakidashi {
     public static void main(String[] args){
         double[][] a;
-        double piv, piv2;
-        int n, i, j, z;
+        int n;
 
         Scanner sc = new Scanner(System.in);
 
@@ -12,16 +11,36 @@ public class Hakidashi {
         System.out.println("係数行列の次元数を入力してください。");
         System.out.print("n = ");
         n = sc.nextInt();
-
         a = new double[n + 1][n + 2];
         System.out.printf("\n拡大係数行列の成分を入力してください。\n");
+        a = gyoretsu(n, a, 'a', sc);
+        System.out.printf("\n入力された拡大係数行列は、\n");
+        printGyoretsu(n, a);
+        check(sc);
+        sc.close();
+        a = hakidashi(n, a);
+        System.out.printf("\n拡大係数行列の階段行列は、\n");
+        printGyoretsu(n, a);
+        System.out.printf("\nしたがって、求められた解は、\n");
+        printKai(n, a);
+    }
+
+    public static double[][] gyoretsu(int n, double[][] a, char c, Scanner sc){
+        int i, j;
+
         for(i = 1; i < n + 1; i++){
             for(j = 1; j < n + 2; j++){
-                System.out.printf("a[%d][%d] = ", i, j);
+                System.out.printf("%c[%d][%d] = ", c, i, j);
                 a[i][j] = sc.nextDouble();
             }
         }
-        sc.close();
+        
+        return a;
+    } 
+
+    public static double[][] hakidashi(int n, double a[][]){
+        int i, j, k;
+        double piv, piv2;
 
         for(i = 1; i < n + 1; i++){
             piv = a[i][i];
@@ -35,25 +54,50 @@ public class Hakidashi {
             for(j = 1; j < n + 1; j++){
                 piv2 = a[j][i];
                 if(j != i){
-                    for(z = i; z < n + 2; z++){
-                        a[j][z] = a[j][z] - piv2 * a[i][z];
+                    for(k = i; k < n + 2; k++){
+                        a[j][k] = a[j][k] - piv2 * a[i][k];
                     }
                 }
             }
         }
 
-        System.out.printf("\n拡大係数行列の階段行列は、\n");
+        return a;
+    }
+
+    public static void printGyoretsu(int n, double a[][]){
+        int i, j;
+
         for(i = 1; i < n + 1; i++){
             System.out.print("[ ");
             for(j = 1; j < n + 2; j++){
-                System.out.print(a[i][j] + " ");
+                System.out.printf("%f ", a[i][j]);
             }
             System.out.println("]");
         }
-        
-        System.out.printf("\nしたがって、求められた解は、\n");
+    } 
+
+    public static void printKai(int n, double a[][]){
+        int i;
+
         for(i = 1; i < n + 1; i++){
             System.out.printf("x%d = %f\n", i, a[i][n + 1]);
         }
     }
+
+    public static void check(Scanner sc){
+        char a;
+        
+        System.out.printf("\n入力内容は正しいですか？　(y/n) ");
+        a = sc.next().charAt(0);
+        if(a == 'n'){
+            System.out.printf("\nプログラムを再実行してください。\n");
+            System.exit(0);
+        }else if(a == 'y'){
+
+        }else{
+            check(sc);
+        }
+    }
 }
+    
+
